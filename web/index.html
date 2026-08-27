@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>safa Hawa — Kathmandu Valley air quality</title>
+    <meta name="description" content="Hourly air quality readings across the Kathmandu Valley." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!--
+      Runtime configuration. This file is NOT bundled: it is served as-is, so a
+      container entrypoint can rewrite it at startup from environment variables.
+      That is what lets one built image run in dev, staging and production
+      without rebuilding. Vite's import.meta.env cannot do this -- it is baked
+      in at build time.
+    -->
+    <script src="/config.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
