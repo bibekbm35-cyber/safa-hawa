@@ -1,0 +1,57 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: hawa
+      POSTGRES_PASSWORD: hawa
+      POSTGRES_DB: safahawa
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hawa -d safahawa"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migration:
+    build:
+      context: ./api
+    environment:
+      DATABASE_URL: postgresql+psycopg://hawa:hawa@postgres:5432/safahawa
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["alembic", "upgrade", "head"]
+
+  api:
+    build:
+      context: ./api
+    environment:
+      DATABASE_URL: postgresql+psycopg://hawa:hawa@postgres:5432/safahawa
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"
+  poller:
+    build:
+      context: ./poller
+    environment:
+      DATABASE_URL: postgresql+psycopg://hawa:hawa@postgres:5432/safahawa
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:
