@@ -6,6 +6,8 @@ services:
       POSTGRES_USER: hawa
       POSTGRES_PASSWORD: hawa
       POSTGRES_DB: safahawa
+    ports:
+      - "15432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

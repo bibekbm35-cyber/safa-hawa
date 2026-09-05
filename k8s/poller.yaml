@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poller
+
+  template:
+    metadata:
+      labels:
+        app: poller
+
+    spec:
+      containers:
+        - name: poller
+          image: safa-hawa-poller:dev
+          imagePullPolicy: Never
+
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: safahawa-db
+                  key: POSTGRES_PASSWORD
+
+            - name: DATABASE_URL
+              value: postgresql+psycopg://hawa:$(POSTGRES_PASSWORD)@postgres:5432/safahawa
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
